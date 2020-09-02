@@ -49,9 +49,9 @@ echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo "Installing phpmyadmin..."
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 sudo apt install unzip php-mbstring
-wget https://files.phpmyadmin.net/phpMyAdmin/5.0.2/phpMyAdmin-5.0.2-all-languages.zip
-sudo unzip phpMyAdmin-5.0.2-all-languages.zip
-sudo mv phpMyAdmin-5.0.2-all-languages /usr/share/phpmyadmin
+wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
+sudo unzip phpMyAdmin-latest-all-languages.zip
+sudo mv $(ls -d phpMyAdmin-*/) /usr/share/phpmyadmin
 sudo mkdir /usr/share/phpmyadmin/tmp
 sudo chown -R www-data:www-data /usr/share/phpmyadmin
 sudo chmod 777 /usr/share/phpmyadmin/tmp
