@@ -23,64 +23,37 @@ if test "$shouldinstall" != "y"
 fi
 
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
+echo "Adding PHP Repositories..."
+echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
+sudo add-apt-repository ppa:ondrej/php
+echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
+echo "Adding Webmin Repositories..."
+echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
+sudo nano /etc/apt/sources.list
+sudo tee -a /etc/apt/sources.list <<< "deb http://download.webmin.com/download/repository sarge contrib"
+wget http://www.webmin.com/jcameron-key.asc
+sudo apt-key add jcameron-key.asc
+echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo "Updating Packages..."
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 sudo apt update -y && sudo apt upgrade -y
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-echo "Installing Tasksel..."
-echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-sudo apt install tasksel -y
-echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo "Install Lamp Server..."
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-sudo tasksel install lamp-server
+sudo apt install apache2 mysql-server php7.3 php7.3-xml php7.3-zip php7.3-mbstring php7.3-curl php7.3-mysql php7.3-gd php7.3-imagick curl webmin
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo "Starting services..."
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-sudo service mysql start
 sudo service apache2 start
+sudo service mysql start
+sudo service webmin start
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo "Securing MySQL..."
 echo "Choose the following answers: N, Y, N, Y, Y"
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo " "
 sudo mysql_secure_installation
-echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-echo "Installing phpmyadmin..."
-echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-sudo apt install unzip php-mbstring
-wget https://www.phpmyadmin.net/downloads/phpMyAdmin-latest-all-languages.zip
-sudo unzip phpMyAdmin-latest-all-languages.zip
-sudo mv $(ls -d phpMyAdmin-*/) /usr/share/phpmyadmin
-sudo mkdir /usr/share/phpmyadmin/tmp
-sudo chown -R www-data:www-data /usr/share/phpmyadmin
-sudo chmod 777 /usr/share/phpmyadmin/tmp
-echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-echo "Add apache config..."
-echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
-sudo touch /etc/apache2/conf-available/phpmyadmin.conf
-sudo tee -a /etc/apache2/conf-available/phpmyadmin.conf <<EOT
-Alias /phpmyadmin /usr/share/phpmyadmin
-Alias /phpMyAdmin /usr/share/phpmyadmin
- 
-<Directory /usr/share/phpmyadmin/>
-   AddDefaultCharset UTF-8
-   <IfModule mod_authz_core.c>
-      <RequireAny>
-      Require all granted
-     </RequireAny>
-   </IfModule>
-</Directory>
- 
-<Directory /usr/share/phpmyadmin/setup/>
-   <IfModule mod_authz_core.c>
-     <RequireAny>
-       Require all granted
-     </RequireAny>
-   </IfModule>
-</Directory>
-EOT
-sudo a2enconf phpmyadmin
+sudo a2enmod rewrite
 sudo service apache2 reload
 sudo service mysql reload
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
@@ -89,4 +62,9 @@ echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 sudo apt install composer nodejs npm -y
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
 echo "Dev Environment successfully installed"
+echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
+echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
+echo "Now execute the following commands in a mysql shell"
+echo "CREATE USER 'WUNSCHUSERNAME'@'localhost' IDENTIFIED WITH mysql_native_password BY 'WUNSCHPASSWORT';"
+echo "GRANT ALL PRIVILEGES ON *.* TO 'WUNSCHUSERNAME'@'localhost';"
 echo "\e[1;42m >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< >< ><\e[0m"
